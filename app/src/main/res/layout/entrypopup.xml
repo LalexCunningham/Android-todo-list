@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:background="#e8e6e4">
+
+    <EditText
+        android:id="@+id/taskName"
+        android:hint="Task name"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:maxLength="30"/>
+
+    <EditText
+        android:id="@+id/taskDescription"
+        android:hint="Task description"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/taskName"
+        android:layout_margin="20dp"
+
+        android:lines="6"
+        android:maxLines="6"
+        android:gravity="top|left"
+        android:maxLength="100"
+        />
+    <Button
+        android:id="@+id/submitBtn"
+        android:text="Add task"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/taskDescription"
+        android:layout_margin="20dp"
+        />
+</RelativeLayout>
