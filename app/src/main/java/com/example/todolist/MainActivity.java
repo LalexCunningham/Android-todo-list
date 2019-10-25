@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,22 +84,29 @@ public class MainActivity extends AppCompatActivity {
 
 
         SharedPreferences sharedPrefTasks = context.getSharedPreferences(
-                "currentDescriptions", Context.MODE_PRIVATE);
+                "currentTasks", Context.MODE_PRIVATE);
         SharedPreferences sharedPrefDescriptions = context.getSharedPreferences(
                 "currentDescriptions", Context.MODE_PRIVATE);
         SharedPreferences sharedPrefTasksDone = context.getSharedPreferences(
                 "currentTasksDone", Context.MODE_PRIVATE);
 
-        System.out.println(sharedPrefTasks.getAll());
-        System.out.println(sharedPrefDescriptions.getAll());
-        System.out.println(sharedPrefTasksDone.getAll());
+        Map taskMap = sharedPrefTasks.getAll();
+        Map descMap = sharedPrefDescriptions.getAll();
+        Map doneMap = sharedPrefTasksDone.getAll();
 
 
-        /*
-        for (int i = 0; i < tasks.size(); i++) {
-            if (getResources().getString())
+
+        for (int i = 0; i < maxTasks; i++) {
+            if (taskMap.get(String.valueOf(i)) != null) {
+                tasks.add(String.valueOf(taskMap.get(String.valueOf(i))));
+                taskDescriptions.add(String.valueOf(descMap.get(String.valueOf(i))));
+                tasksDone.add(Boolean.valueOf(String.valueOf(doneMap.get(String.valueOf(i)))));
+            }
         }
-        */
+
+        joinedTasks.add(tasks);
+        joinedTasks.add(taskDescriptions);
+        joinedTasks.add(tasksDone);
 
         return joinedTasks;
     }
@@ -162,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         getPrefsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSavedList(v.getContext());
+                System.out.println(getSavedList(v.getContext()));
             }
         });
     }
