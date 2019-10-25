@@ -3,6 +3,7 @@ package com.example.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,9 +35,73 @@ public class MainActivity extends AppCompatActivity {
             descriptions.add(description);
             finished.add(false);
         }
+        // TODO: Stop user from entering empty task
     }
 
+    public static void saveList (Context context) {
+        // Open preferences file for today's list
+        SharedPreferences sharedPrefTasks = context.getSharedPreferences(
+                "currentTasks", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefDescriptions = context.getSharedPreferences(
+                "currentDescriptions", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefTasksDone = context.getSharedPreferences(
+                "currentTasksDone", Context.MODE_PRIVATE);
 
+
+        // Write to preferences
+        SharedPreferences.Editor tasksEditor = sharedPrefTasks.edit();
+        tasksEditor.clear();
+        tasksEditor.apply();
+        for (int i = 0; i < tasks.size(); i++) {
+            tasksEditor.putString(String.valueOf(i), tasks.get(i));
+            tasksEditor.apply();
+        }
+        SharedPreferences.Editor descriptionsEditor = sharedPrefDescriptions.edit();
+        descriptionsEditor.clear();
+        descriptionsEditor.apply();
+        for (int i = 0; i < tasks.size(); i++) {
+            descriptionsEditor.putString(String.valueOf(i), descriptions.get(i));
+            descriptionsEditor.apply();
+        }
+        SharedPreferences.Editor tasksDoneEditor = sharedPrefTasksDone.edit();
+        tasksDoneEditor.clear();
+        tasksDoneEditor.apply();
+        for (int i = 0; i < tasks.size(); i++) {
+            tasksDoneEditor.putString(String.valueOf(i), finished.get(i).toString());
+            tasksDoneEditor.apply();
+        }
+
+    }
+
+    public static ArrayList<ArrayList> getSavedList (Context context) {
+        ArrayList<String> tasks = new ArrayList<>();
+        ArrayList<String> taskDescriptions = new ArrayList<>();
+        ArrayList<Boolean> tasksDone = new ArrayList<>();
+
+        // Arraylist of arraylists to be returned by the method
+        ArrayList<ArrayList> joinedTasks = new ArrayList<>();
+
+
+        SharedPreferences sharedPrefTasks = context.getSharedPreferences(
+                "currentDescriptions", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefDescriptions = context.getSharedPreferences(
+                "currentDescriptions", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefTasksDone = context.getSharedPreferences(
+                "currentTasksDone", Context.MODE_PRIVATE);
+
+        System.out.println(sharedPrefTasks.getAll());
+        System.out.println(sharedPrefDescriptions.getAll());
+        System.out.println(sharedPrefTasksDone.getAll());
+
+
+        /*
+        for (int i = 0; i < tasks.size(); i++) {
+            if (getResources().getString())
+        }
+        */
+
+        return joinedTasks;
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -47,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
         list.setAdapter(adapter);
 
         Button addBtn = (Button)findViewById(R.id.addBtn);
-
-
+        Button getPrefsBtn = (Button)findViewById(R.id.getPrefsBtn);
 
 
         //adapter.notifyDataSetChanged();
@@ -85,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.enterItem(name, description);
                         adapter.notifyDataSetChanged();
                         popupWindow.dismiss();
+                        saveList(v.getContext());
                     }
                 });
 
@@ -94,6 +159,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getPrefsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSavedList(v.getContext());
+            }
+        });
     }
 
 
