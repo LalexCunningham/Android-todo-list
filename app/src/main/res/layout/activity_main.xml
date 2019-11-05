@@ -47,4 +47,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/toDoListView"
         app:layout_constraintRight_toLeftOf="@id/addBtn"/>
+
+    <Button
+        android:id="@+id/delPrefsBtn"
+        android:text="Delete Prefs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toDoListView"
+        app:layout_constraintLeft_toRightOf="@id/addBtn"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

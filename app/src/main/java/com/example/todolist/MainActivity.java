@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPrefTasksDone = context.getSharedPreferences(
                 "currentTasksDone", Context.MODE_PRIVATE);
 
-
+        // TODO: Refactor this mess
         // Write to preferences
         SharedPreferences.Editor tasksEditor = sharedPrefTasks.edit();
         tasksEditor.clear();
@@ -111,16 +111,49 @@ public class MainActivity extends AppCompatActivity {
         return joinedTasks;
     }
 
+    public static void deleteSavedLists (Context context) {
+
+        SharedPreferences sharedPrefTasks = context.getSharedPreferences(
+                "currentTasks", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefDescriptions = context.getSharedPreferences(
+                "currentDescriptions", Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefTasksDone = context.getSharedPreferences(
+                "currentTasksDone", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor tasksEditor = sharedPrefTasks.edit();
+        tasksEditor.clear();
+        tasksEditor.apply();
+
+        SharedPreferences.Editor descriptionsEditor = sharedPrefDescriptions.edit();
+        descriptionsEditor.clear();
+        descriptionsEditor.apply();
+
+        SharedPreferences.Editor tasksDoneEditor = sharedPrefTasksDone.edit();
+        tasksDoneEditor.clear();
+        tasksDoneEditor.apply();
+    }
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Load list from prefs on startup
+        ArrayList<ArrayList> savedList = getSavedList(this);
+        tasks = savedList.get(0);
+        descriptions = savedList.get(1);
+        finished = savedList.get(2);
+
+        // Initialize adapter and apply the arraylists to it
         final MyListAdapter adapter = new MyListAdapter(this, tasks, descriptions,finished);
         list = (ListView)findViewById(R.id.toDoListView);
         list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         Button addBtn = (Button)findViewById(R.id.addBtn);
         Button getPrefsBtn = (Button)findViewById(R.id.getPrefsBtn);
+        Button delPrefsBtn = (Button) findViewById(R.id.delPrefsBtn);
+
 
 
         //adapter.notifyDataSetChanged();
@@ -173,7 +206,19 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(getSavedList(v.getContext()));
             }
         });
-    }
 
+        delPrefsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteSavedLists(v.getContext());
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 
 }

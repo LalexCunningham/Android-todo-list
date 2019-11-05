@@ -38,5 +38,5 @@ public class MyListAdapter extends ArrayAdapter<String> {
         itemDescription.setText(taskDescription.get(position));
 
         return rowView;
-    };
+    }
 }
